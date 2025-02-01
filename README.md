@@ -15,7 +15,9 @@ GlobalProtect on macOS has an annoying floating login window that:
 - **Forces repetitive login steps** every time you need VPN access.
     
 
-This script **completely eliminates** these issues by: ✅ **Storing your credentials securely in Keychain** (without hardcoding passwords).  
+This script **completely eliminates** these issues by:
+
+✅ **Storing your credentials securely in Keychain** (without hardcoding passwords).  
 ✅ **Automatically filling in your username and password** every time you log in.  
 ✅ **Following XDG standards**, keeping your system clean and organized.
 
