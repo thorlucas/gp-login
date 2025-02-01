@@ -1,0 +1,10 @@
+# macOS
+.DS_Store
+.Spotlight-V100
+.Trashes
+
+# Editor directories and files
+.vscode/
+.idea/
+*.swp
+*~
