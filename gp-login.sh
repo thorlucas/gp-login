@@ -1,29 +1,27 @@
-#!/bin/zsh
+#!/bin/sh
 
 # Set default XDG_CONFIG_HOME if not set
 XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
-
-# Config file path
 CONFIG_FILE="$XDG_CONFIG_HOME/globalprotect/config"
 
 # Ensure config directory exists
 mkdir -p "$XDG_CONFIG_HOME/globalprotect"
 
 # If config file doesn't exist, prompt user to create it
-if [[ ! -f "$CONFIG_FILE" ]]; then
+if [ ! -f "$CONFIG_FILE" ]; then
   echo "Username not found. Creating config file at $CONFIG_FILE."
-  echo -n "Enter your GlobalProtect username: "
+  printf "Enter your GlobalProtect username: "
   read GP_USERNAME
-  echo "USERNAME=$GP_USERNAME" > "$CONFIG_FILE"
+  echo "GP_USERNAME=$GP_USERNAME" > "$CONFIG_FILE"
   echo "Config saved. Run the script again."
   exit 0
 fi
 
 # Load username from config file
-GP_USERNAME=$(grep '^USERNAME=' "$CONFIG_FILE" | cut -d '=' -f2)
+GP_USERNAME=$(grep '^GP_USERNAME=' "$CONFIG_FILE" | cut -d '=' -f2)
 
 # Check if username is still empty
-if [[ -z "$GP_USERNAME" ]]; then
+if [ -z "$GP_USERNAME" ]; then
   echo "Error: No username found in $CONFIG_FILE" >&2
   exit 1
 fi
@@ -35,10 +33,12 @@ KEYCHAIN_SERVICE="GlobalProtect"
 PASSWORD=$(security find-generic-password -s "$KEYCHAIN_SERVICE" -w 2>/dev/null)
 
 # If password isn't found, prompt the user to add it
-if [[ -z "$PASSWORD" ]]; then
+if [ -z "$PASSWORD" ]; then
   echo "No password found in Keychain for $KEYCHAIN_SERVICE."
-  echo -n "Enter your GlobalProtect password: "
-  read -s PASSWORD  # -s makes input silent for passwords
+  printf "Enter your GlobalProtect password: "
+  stty -echo
+  read PASSWORD
+  stty echo
   echo
   echo "Storing password in Keychain..."
   security add-generic-password -s "$KEYCHAIN_SERVICE" -a "$GP_USERNAME" -w "$PASSWORD"
